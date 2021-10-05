@@ -1,8 +1,8 @@
 import json
 import requests
-import settings
+from request_handler import RequestHandler
 
-class JRangeGetter:
+class WorkoutsHandler(RequestHandler):
     """
     Wrapper for the GetJRange GraphQL query.
 
@@ -20,6 +20,7 @@ class JRangeGetter:
     }
 
     def __init__(self, user_id: str, to: str, how_many_weeks: int):
+        super().__init__()
         #TODO - Parameters validation
 
         self.user_id = user_id
@@ -30,18 +31,17 @@ class JRangeGetter:
         self.query["variables"]["range"] = self.how_many_weeks
         self.workouts = []
 
-    def get_jrange(self):
-        r = requests.post(settings.URL, json=self.query)
-        print(r.status_code)
-        print(r.text)
-        # TODO Manage status code
-        json_data = json.loads(r.text)['data']['jrange']
-        exercises = json_data['exercises']
-        self.workouts = json_data['days']
-        self.workouts = [self.add_exercise_to_workout(workout, exercises) for workout in self.workouts]
+    def get(self):
+        # TODO multiple queries necessary here because of the range variable limitation
+        # loop and modify the query variables
+        # check schema first to make sure there's not other way
+        super().get()
 
+    def parse(self):
+        jrange = self.data['jrange']
+        self.workouts = [self.add_exercise_info_to_workout(workout, jrange['exercises']) for workout in jrange['days']]
 
-    def add_exercise_to_workout(self, workout, exercises):
+    def add_exercise_info_to_workout(self, workout, exercises):
         for exercise in workout["did"]:
             exercise["exercise"] = next(filter(lambda e: e["id"] == exercise["eid"], exercises))
         return workout

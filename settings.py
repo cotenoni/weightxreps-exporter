@@ -1,1 +1,0 @@
-URL = "https://weightxreps.net/wxr-server-2/graphql"
