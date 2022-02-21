@@ -4,6 +4,7 @@ import requests
 class RequestHandler:
     URL = "https://weightxreps.net/wxr-server-2/graphql"
     query = None
+    raw = None
 
     def __init__(self) -> None:
         if self.query == None:
@@ -14,6 +15,7 @@ class RequestHandler:
     def get(self):
         r = requests.post(self.URL, json=self.query)
         r.raise_for_status()
+        self.raw = r.text
         self.data = json.loads(r.text)['data']
         self.parse()
 
