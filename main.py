@@ -8,9 +8,14 @@ FILENAME_PREFIX = "export/"
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('uid', type=str, help='weightxreps user id. Can be found by looking at GraphQL query made when accessing the user profile.')
-    parser.add_argument('-s', '--start', type=date, default=date.today() - timedelta(days=1), help='Start date for the export. Default: yesterday.')
-    parser.add_argument('-e', '--end', type=date, default=date.today(), help='End date for the export. Default: today.')
-    return parser.parse_args()
+    parser.add_argument('-s', '--start', type=date.fromisoformat, default=date.today() - timedelta(days=21), help='Start date for the export. Default: 3 weeks ago.')
+    parser.add_argument('-e', '--end', type=date.fromisoformat, default=date.today(), help='End date for the export. Default: today.')
+    args = parser.parse_args()
+
+    if args.end <= args.start:
+        raise ValueError("End date need to be after start date.",)
+
+    return args
 
 def create_export_dir_if_inexistant():
     if not os.path.isdir('export'):
