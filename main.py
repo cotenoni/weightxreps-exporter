@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta
 import argparse
 import os
 
-FILENAME_PREFIX = "export/"
+DIR_NAME = "export"
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
@@ -18,12 +18,12 @@ def parse_arguments():
     return args
 
 def create_export_dir_if_inexistant():
-    if not os.path.isdir('export'):
-        os.mkdir("export")
+    if not os.path.isdir(DIR_NAME):
+        os.mkdir(DIR_NAME)
     return
 
-def create_and_write_file(raw_data: str):
-    filename = FILENAME_PREFIX + str(datetime.now())
+def create_and_write_file(file_prefix: str, raw_data: str):
+    filename = DIR_NAME + '/' + file_prefix + '_' + str(datetime.now())
     for c in [" ", "-", ":", "."]:
         filename = filename.replace(c, "")
     
@@ -42,11 +42,11 @@ if __name__ == '__main__':
 
     userInfoWrapper = GetUserInfo(args.username)
     userInfoWrapper.get()
-    #create_and_write_file(userInfoWrapper.raw)
+    create_and_write_file("UserInfo", userInfoWrapper.raw)
 
     jr = GetJRange(userInfoWrapper.user_id, '2021-10-04', 3)
     jr.get()
-    create_and_write_file(jr.raw)
+    create_and_write_file("Workouts", jr.raw)
 
 
     
