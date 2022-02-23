@@ -36,9 +36,7 @@ if __name__ == '__main__':
     args = parse_arguments()
     create_export_dir_if_inexistant()
 
-    print(args.username)
-    print(args.start)
-    print(args.end)
+    print(args)
 
     userInfoWrapper = GetUserInfo(args.username)
     userInfoWrapper.get()
