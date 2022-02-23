@@ -1,4 +1,4 @@
-from workouts_handler import WorkoutsHandler
+from workoutshandler import WorkoutsHandler
 from datetime import date, datetime, timedelta
 import argparse
 import os
