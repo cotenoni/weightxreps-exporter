@@ -7,7 +7,7 @@ FILENAME_PREFIX = "export/"
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('uid', type=str, help='weightxreps user id. Can be found by looking at GraphQL query made when accessing the user profile.')
+    parser.add_argument('username', type=str, help='weightxreps username for whom to export data.')
     parser.add_argument('-s', '--start', type=date.fromisoformat, default=date.today() - timedelta(days=21), help='Start date for the export. Default: 3 weeks ago.')
     parser.add_argument('-e', '--end', type=date.fromisoformat, default=date.today(), help='End date for the export. Default: today.')
     args = parser.parse_args()
@@ -36,11 +36,15 @@ if __name__ == '__main__':
     args = parse_arguments()
     create_export_dir_if_inexistant()
 
-    print(args.uid)
+    print(args.username)
     print(args.start)
     print(args.end)
 
-    jr = GetJRange("4090", '2021-10-04', 3)
+    userInfoWrapper = GetUserInfo(args.username)
+    userInfoWrapper.get()
+    #create_and_write_file(userInfoWrapper.raw)
+
+    jr = GetJRange(userInfoWrapper.user_id, '2021-10-04', 3)
     jr.get()
     create_and_write_file(jr.raw)
 
