@@ -1,8 +1,6 @@
-import json
-import requests
-from requesthandler import RequestHandler
+from wrappers.baserequestwrapper import BaseRequestWrapper
 
-class WorkoutsHandler(RequestHandler):
+class GetJRange(BaseRequestWrapper):
     """
     Wrapper for the GetJRange GraphQL query.
 

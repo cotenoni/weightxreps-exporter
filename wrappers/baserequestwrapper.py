@@ -1,7 +1,7 @@
 import json
 import requests
 
-class RequestHandler:
+class BaseRequestWrapper:
     URL = "https://weightxreps.net/wxr-server-2/graphql"
     query = None
     raw = None

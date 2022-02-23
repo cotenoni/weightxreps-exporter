@@ -1,4 +1,4 @@
-from workoutshandler import WorkoutsHandler
+from wrappers import GetJRange, GetUserInfo
 from datetime import date, datetime, timedelta
 import argparse
 import os
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     print(args.start)
     print(args.end)
 
-    jr = WorkoutsHandler("4090", '2021-10-04', 3)
+    jr = GetJRange("4090", '2021-10-04', 3)
     jr.get()
     create_and_write_file(jr.raw)
 
