@@ -11,7 +11,7 @@ class GetUserInfo(BaseRequestWrapper):
         "variables": {
             "userInfoUname": ""
         },
-        "query": "query GetUserInfo($userInfoUname: String!) {\n  userInfo(uname: $userInfoUname) {\n    user {\n      ...UserFields\n      __typename\n    }\n    daysLogged\n    best3 {\n      w\n      e {\n        id\n        name\n        type\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment UserFields on User {\n  id\n  avatarhash\n  uname\n  cc\n  slvl\n  sok\n  age\n  bw\n  private\n  isf\n  joined\n  usekg\n  custom1RM\n  est1RMFactor\n  jranges\n  estimate1RMFormula\n  __typename\n}\n"
+        "query": "query GetUserInfo($userInfoUname: String!) {\n  userInfo(uname: $userInfoUname) {\n    user {\n      ...UserFields\n          }\n    daysLogged\n    best3 {\n      w\n      e {\n        id\n        name\n        type\n              }\n          }\n      }\n}\n\nfragment UserFields on User {\n  id\n  avatarhash\n  uname\n  cc\n  slvl\n  sok\n  age\n  bw\n  private\n  isf\n  joined\n  usekg\n  custom1RM\n  est1RMFactor\n  jranges\n  estimate1RMFormula\n  }\n"
     }
 
     def __init__(self, username: str):
