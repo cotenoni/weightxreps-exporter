@@ -1,4 +1,5 @@
 from wrappers.baserequestwrapper import BaseRequestWrapper
+from datetime import datetime
 
 class GetUserInfo(BaseRequestWrapper):
     """
@@ -23,4 +24,7 @@ class GetUserInfo(BaseRequestWrapper):
 
     def parse(self):
         self.user_id = self.data['userInfo']["user"]["id"]
+        self.user_info = self.data['userInfo']
+        self.date_joined = datetime.strptime(self.user_info['user']['joined'], "%a, %d %b %Y %H:%M:%S %Z").date()
+        
         
