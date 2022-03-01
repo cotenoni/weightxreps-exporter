@@ -1,5 +1,5 @@
 from wrappers.baserequestwrapper import BaseRequestWrapper
-from datetime import date
+from datetime import date, timedelta
 
 class GetJRange(BaseRequestWrapper):
     """
@@ -26,7 +26,7 @@ class GetJRange(BaseRequestWrapper):
         self.end = end
         
         self.query["variables"]["uid"] = self.user_id
-        self.query["variables"]["ymd"] = self.end.isoformat()
+        
         self.query["variables"]["range"] = 12 # The query only seems to support the following values 3, 6, 8, 12, 16
         self.workouts = []
 
@@ -34,7 +34,16 @@ class GetJRange(BaseRequestWrapper):
         # TODO multiple queries necessary here because of the range variable limitation
         # loop and modify the query variables
         # check schema first to make sure there's not other way
-        super().get()
+        current_end = self.start + timedelta(weeks=12)
+        current_start = self.start
+
+        #FIXME : missing workouts because the last query is not made and when we do, we will get more workouts than necessary
+        while current_end < self.end:
+            self.query["variables"]["ymd"] = current_end.isoformat()
+            print(f"Querying from {current_start.isoformat()} to {current_end.isoformat()}")
+            super().get()
+            current_end = current_end + timedelta(weeks=12) 
+            current_start = current_start + timedelta(weeks=12)
 
     def parse(self):
         jrange = self.data['jrange']
