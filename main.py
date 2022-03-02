@@ -9,11 +9,11 @@ DIR_NAME = "export"
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('username', type=str, help='weightxreps username for whom to export data.')
-    parser.add_argument('-s', '--start', type=date.fromisoformat, default=date.today() - timedelta(days=21), help='Start date for the export. Default: 3 weeks ago.')
+    parser.add_argument('-s', '--start', type=date.fromisoformat, default=None, help='Start date for the export. Default: 3 weeks ago.')
     parser.add_argument('-e', '--end', type=date.fromisoformat, default=date.today(), help='End date for the export. Default: today.')
     args = parser.parse_args()
 
-    if args.end <= args.start:
+    if args.start is not None and args.end <= args.start:
         raise ValueError("End date need to be after start date.",)
 
     return args
@@ -39,6 +39,9 @@ if __name__ == '__main__':
     userInfoWrapper = GetUserInfo(args.username)
     userInfoWrapper.get()
     create_and_write_file("UserInfo", json.dumps(userInfoWrapper.user_info))
+
+    if args.start is None:
+        args.start = userInfoWrapper.date_joined
 
     jr = GetJRange(userInfoWrapper.user_id, args.start, args.end)
     jr.get()
