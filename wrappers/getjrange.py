@@ -31,14 +31,12 @@ class GetJRange(BaseRequestWrapper):
         self.workouts = []
 
     def get(self):
-        # TODO multiple queries necessary here because of the range variable limitation
-        # loop and modify the query variables
-        # check schema first to make sure there's not other way
+        # Multiple queries necessaries here because of the range variable limitation (we can
+        # only get 3, 6, 8, 12, 16 weeks at a time)
         current_end = self.start + timedelta(weeks=12)
         current_start = self.start
 
-        #FIXME : missing workouts because the last query is not made and when we do, we will get more workouts than necessary
-        while current_end < self.end:
+        while current_end < (self.end + timedelta(weeks=12)):
             self.query["variables"]["ymd"] = current_end.isoformat()
             print(f"Querying from {current_start.isoformat()} to {current_end.isoformat()}")
             super().get()
@@ -49,7 +47,7 @@ class GetJRange(BaseRequestWrapper):
         jrange = self.data['jrange']
 
         if jrange is not None:
-            self.workouts += [self.add_exercise_info_to_workout(workout, jrange['exercises']) for workout in jrange['days']]
+            self.workouts += [self.add_exercise_info_to_workout(workout, jrange['exercises']) for workout in jrange['days'] if date.fromisoformat(workout["on"]) <= self.end]
 
     def add_exercise_info_to_workout(self, workout, exercises):
         for exercise in workout["did"]:
